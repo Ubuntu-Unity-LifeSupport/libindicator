@@ -1,0 +1,30 @@
+libindicator (0.2.0~bzr325-0ubuntu1) karmic; urgency=low
+
+  [ Ted Gould ]
+  * New version (LP: #417039)
+  * Merging in the seperation from indicator-applet
+  * debian/* Removing all of the indicator-applet stuff
+  * Setting the icon path in the .pc file.
+  * Merging onto the main packaging branch.
+  * Renaming the second Bonobo server description file to match that
+    of the FastUserSwitchApplet.
+  * Upstream merge for better naming of the applet.
+  * Updating from upstream with two (count them) two applets
+    installed in the source.
+  * debian/control: Adding information on indicator-applet-sus which
+    is a different applet for the SUS indicator.
+  * debian/indicator-applet.install: Making it more specific so that
+    it doesn't grab the directories that now have additional files
+    created by indicator-applet-sus existing.
+  * debian/indicator-applet-sus.install: List files that are now
+    used by the new binary package.
+
+  [ Ken VanDine ]
+  * debian/control:
+    - Set both Vcs-Bzr and Vcs-Bzr-Browser, with ~ubuntu-desktop 
+
+  [ Martin Pitt ]
+  * Flush changelog.
+  * debian/control: Fix Vcs-* links.
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 25 Aug 2009 08:35:00 +0200
