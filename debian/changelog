@@ -1,3 +1,11 @@
+libindicator (0.2.0-0ubuntu1) karmic; urgency=low
+
+  * Upstream release 0.2.0 (LP: #427443):
+    - Use silent automake mode.
+    - Tag for final release.
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 10 Sep 2009 20:22:45 +0200
+
 libindicator (0.2.0~bzr325-0ubuntu1) karmic; urgency=low
 
   [ Ted Gould ]
