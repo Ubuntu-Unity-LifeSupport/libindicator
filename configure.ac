@@ -1,10 +1,10 @@
 
-AC_INIT(libindicator, 0.2.1, ted@canonical.com)
+AC_INIT(libindicator, 0.3.0, ted@canonical.com)
 
 AC_PREREQ(2.53)
 
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(libindicator, 0.2.1)
+AM_INIT_AUTOMAKE(libindicator, 0.3.0)
 
 AM_MAINTAINER_MODE
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES])
@@ -19,6 +19,19 @@ AC_SUBST(VERSION)
 AC_CONFIG_MACRO_DIR([m4])
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
+
+##############################
+# Dependencies
+##############################
+
+GTK_REQUIRED_VERSION=2.18
+DBUS_REQUIRED_VERSION=0.76
+
+PKG_CHECK_MODULES(LIBINDICATOR, gtk+-2.0 >= $GTK_REQUIRED_VERSION
+                                dbus-glib-1 >= $DBUS_REQUIRED_VERSION)
+
+AC_SUBST(LIBINDICATOR_CFLAGS)
+AC_SUBST(LIBINDICATOR_LIBS)
 
 ##############################
 # Custom Junk
@@ -73,6 +86,8 @@ AC_OUTPUT([
 Makefile
 libindicator/Makefile
 libindicator/indicator.pc
+tests/Makefile
+tools/Makefile
 ])
 
 ###########################
