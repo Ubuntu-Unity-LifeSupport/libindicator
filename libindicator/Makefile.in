@@ -57,7 +57,10 @@ DIST_COMMON = $(libindicatorinclude_HEADERS) $(srcdir)/Makefile.am \
 	$(top_srcdir)/Makefile.am.marshal
 subdir = libindicator
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -94,6 +97,7 @@ am__objects_1 =
 am_libindicator_la_OBJECTS = $(am__objects_1) \
 	libindicator_la-indicator-object.lo \
 	libindicator_la-indicator-desktop-shortcuts.lo \
+	libindicator_la-indicator-image-helper.lo \
 	libindicator_la-indicator-object-marshal.lo \
 	libindicator_la-indicator-service.lo \
 	libindicator_la-indicator-service-manager.lo
@@ -270,6 +274,7 @@ libindicatorincludedir = $(includedir)/libindicator-0.3/libindicator
 indicator_headers = \
 	indicator.h \
 	indicator-desktop-shortcuts.h \
+	indicator-image-helper.h \
 	indicator-object.h \
 	indicator-service.h \
 	indicator-service-manager.h
@@ -285,6 +290,7 @@ libindicator_la_SOURCES = \
 	dbus-shared.h \
 	indicator-object.c \
 	indicator-desktop-shortcuts.c \
+	indicator-image-helper.c \
 	indicator-object-marshal.h \
 	indicator-object-marshal.c \
 	indicator-service.c \
@@ -387,6 +393,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libindicator_la-indicator-desktop-shortcuts.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libindicator_la-indicator-image-helper.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libindicator_la-indicator-object-marshal.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libindicator_la-indicator-object.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libindicator_la-indicator-service-manager.Plo@am__quote@
@@ -431,6 +438,14 @@ libindicator_la-indicator-desktop-shortcuts.lo: indicator-desktop-shortcuts.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='indicator-desktop-shortcuts.c' object='libindicator_la-indicator-desktop-shortcuts.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libindicator_la_CFLAGS) $(CFLAGS) -c -o libindicator_la-indicator-desktop-shortcuts.lo `test -f 'indicator-desktop-shortcuts.c' || echo '$(srcdir)/'`indicator-desktop-shortcuts.c
+
+libindicator_la-indicator-image-helper.lo: indicator-image-helper.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libindicator_la_CFLAGS) $(CFLAGS) -MT libindicator_la-indicator-image-helper.lo -MD -MP -MF $(DEPDIR)/libindicator_la-indicator-image-helper.Tpo -c -o libindicator_la-indicator-image-helper.lo `test -f 'indicator-image-helper.c' || echo '$(srcdir)/'`indicator-image-helper.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libindicator_la-indicator-image-helper.Tpo $(DEPDIR)/libindicator_la-indicator-image-helper.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='indicator-image-helper.c' object='libindicator_la-indicator-image-helper.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libindicator_la_CFLAGS) $(CFLAGS) -c -o libindicator_la-indicator-image-helper.lo `test -f 'indicator-image-helper.c' || echo '$(srcdir)/'`indicator-image-helper.c
 
 libindicator_la-indicator-object-marshal.lo: indicator-object-marshal.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libindicator_la_CFLAGS) $(CFLAGS) -MT libindicator_la-indicator-object-marshal.lo -MD -MP -MF $(DEPDIR)/libindicator_la-indicator-object-marshal.Tpo -c -o libindicator_la-indicator-object-marshal.lo `test -f 'indicator-object-marshal.c' || echo '$(srcdir)/'`indicator-object-marshal.c
