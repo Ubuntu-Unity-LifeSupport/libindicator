@@ -96,6 +96,7 @@ libindicator_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am__objects_1 =
 am_libindicator_la_OBJECTS = $(am__objects_1) \
 	libindicator_la-indicator-object.lo \
+	libindicator_la-indicator-object-enum-types.lo \
 	libindicator_la-indicator-desktop-shortcuts.lo \
 	libindicator_la-indicator-image-helper.lo \
 	libindicator_la-indicator-object-marshal.lo \
@@ -168,6 +169,7 @@ EXEEXT = @EXEEXT@
 EXPANDED_SYSCONFDIR = @EXPANDED_SYSCONFDIR@
 FGREP = @FGREP@
 GLIB_GENMARSHAL = @GLIB_GENMARSHAL@
+GLIB_MKENUMS = @GLIB_MKENUMS@
 GREP = @GREP@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
@@ -263,11 +265,15 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-BUILT_SOURCES = $(marshal_h) $(marshal_c) $(DBUS_SPECS:.xml=-client.h) \
-	$(DBUS_SPECS:.xml=-server.h)
-CLEANFILES = stamp-marshal $(BUILT_SOURCES)
+BUILT_SOURCES = indicator-object-enum-types.h \
+	indicator-object-enum-types.c $(marshal_h) $(marshal_c) \
+	$(DBUS_SPECS:.xml=-client.h) $(DBUS_SPECS:.xml=-server.h)
+CLEANFILES = stamp-marshal indicator-object-enum-types.h \
+	indicator-object-enum-types.c s-enum-types-h s-enum-types-c \
+	$(BUILT_SOURCES)
 DISTCLEANFILES = $(marshal_h) $(marshal_c)
-EXTRA_DIST = indicator.pc.in $(glib_marshal_list) $(DBUS_SPECS)
+EXTRA_DIST = indicator.pc.in $(glib_marshal_list) \
+	indicator-object-enum-types.h $(DBUS_SPECS)
 marshal_h = $(glib_marshal_list:.list=.h)
 marshal_c = $(glib_marshal_list:.list=.c)
 libindicatorincludedir = $(includedir)/libindicator-0.3/libindicator
@@ -289,6 +295,7 @@ libindicator_la_SOURCES = \
 	$(indicator_headers) \
 	dbus-shared.h \
 	indicator-object.c \
+	indicator-object-enum-types.c \
 	indicator-desktop-shortcuts.c \
 	indicator-image-helper.c \
 	indicator-object-marshal.h \
@@ -394,6 +401,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libindicator_la-indicator-desktop-shortcuts.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libindicator_la-indicator-image-helper.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libindicator_la-indicator-object-enum-types.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libindicator_la-indicator-object-marshal.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libindicator_la-indicator-object.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libindicator_la-indicator-service-manager.Plo@am__quote@
@@ -430,6 +438,14 @@ libindicator_la-indicator-object.lo: indicator-object.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='indicator-object.c' object='libindicator_la-indicator-object.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libindicator_la_CFLAGS) $(CFLAGS) -c -o libindicator_la-indicator-object.lo `test -f 'indicator-object.c' || echo '$(srcdir)/'`indicator-object.c
+
+libindicator_la-indicator-object-enum-types.lo: indicator-object-enum-types.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libindicator_la_CFLAGS) $(CFLAGS) -MT libindicator_la-indicator-object-enum-types.lo -MD -MP -MF $(DEPDIR)/libindicator_la-indicator-object-enum-types.Tpo -c -o libindicator_la-indicator-object-enum-types.lo `test -f 'indicator-object-enum-types.c' || echo '$(srcdir)/'`indicator-object-enum-types.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libindicator_la-indicator-object-enum-types.Tpo $(DEPDIR)/libindicator_la-indicator-object-enum-types.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='indicator-object-enum-types.c' object='libindicator_la-indicator-object-enum-types.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libindicator_la_CFLAGS) $(CFLAGS) -c -o libindicator_la-indicator-object-enum-types.lo `test -f 'indicator-object-enum-types.c' || echo '$(srcdir)/'`indicator-object-enum-types.c
 
 libindicator_la-indicator-desktop-shortcuts.lo: indicator-desktop-shortcuts.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libindicator_la_CFLAGS) $(CFLAGS) -MT libindicator_la-indicator-desktop-shortcuts.lo -MD -MP -MF $(DEPDIR)/libindicator_la-indicator-desktop-shortcuts.Tpo -c -o libindicator_la-indicator-desktop-shortcuts.lo `test -f 'indicator-desktop-shortcuts.c' || echo '$(srcdir)/'`indicator-desktop-shortcuts.c
@@ -748,6 +764,22 @@ $(marshal_c): $(marshal_h)
 	$(srcdir)/$(glib_marshal_list)) > xgen-mc \
 	&& cp xgen-mc $(marshal_c) \
 	&& rm -f xgen-mc
+
+indicator-object-enum-types.h: s-enum-types-h
+	@true
+s-enum-types-h: $(indicator_headers)
+	( cd $(srcdir) && $(GLIB_MKENUMS) --template $(srcdir)/indicator-object-enum-types.h.template								\
+		$(indicator_headers) ) >> tmp-indicator-object-enum-types.h											\
+	&& (cmp -s tmp-indicator-object-enum-types.h indicator-object-enum-types.h || cp tmp-indicator-object-enum-types.h indicator-object-enum-types.h )	\
+	&& rm -f tmp-indicator-object-enum-types.h && echo timestamp > $(@F)
+
+indicator-object-enum-types.c: s-enum-types-c
+	@true
+s-enum-types-c: $(indicator_headers)
+	( cd $(srcdir) && $(GLIB_MKENUMS) --template $(srcdir)/indicator-object-enum-types.c.template								\
+		$(indicator_headers) ) > tmp-indicator-object-enum-types.c											\
+	&& (cmp -s tmp-indicator-object-enum-types.c indicator-object-enum-types.c || cp tmp-indicator-object-enum-types.c indicator-object-enum-types.c )	\
+	&& rm -f tmp-indicator-object-enum-types.c
 
 %-client.h: %.xml
 	dbus-binding-tool \
