@@ -1,9 +1,11 @@
 Source: libindicator
 Section: libs
 Priority: optional
-Maintainer: Evgeni Golov <evgeni@debian.org>
-Uploaders: Kartik Mistry <kartik@debian.org>
-Build-Depends: debhelper (>= 7.0.50~),
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+XSBC-Original-Maintainer: The Ayatana Packagers <pkg-ayatana-devel@lists.alioth.debian.org>
+Uploaders: Evgeni Golov <evgeni@debian.org>, Kartik Mistry <kartik@debian.org>
+Build-Depends: debhelper (>= 5.0),
+               cdbs (>= 0.4.41),
                libglib2.0-dev (>= 2.22),
                libgtk2.0-dev (>= 2.12.0),
                libdbus-glib-1-dev,
@@ -12,8 +14,8 @@ Build-Depends: debhelper (>= 7.0.50~),
                gtk-doc-tools
 Standards-Version: 3.8.4
 Homepage: https://launchpad.net/libindicator
-Vcs-Git: git://git.debian.org/collab-maint/libindicator.git
-Vcs-Browser: http://git.debian.org/?p=collab-maint/libindicator.git
+Vcs-Bzr: https://code.launchpad.net/~indicator-applet-developers/libindicator/ubuntu
+Vcs-Browser: http://bazaar.launchpad.net/~indicator-applet-developers/libindicator/ubuntu
 
 Package: libindicator0
 Section: libs
