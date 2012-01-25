@@ -5,10 +5,10 @@ Description: <short summary of the patch>
  information below has been extracted from the changelog. Adjust it or drop
  it.
  .
- libindicator (0.4.90-0ubuntu2) precise; urgency=low
+ libindicator (0.4.90-0ubuntu3) precise; urgency=low
  .
-   * debian/control
-     - dropped the Conflicts with libindicator6 and libindicator3-6
+   * libindicator/indicator-object.c
+     - basically disable the new visibility stuff because it breaks appmenus
 Author: Ken VanDine <ken.vandine@canonical.com>
 
 ---
@@ -34,3 +34,23 @@ Last-Update: <YYYY-MM-DD>
  	-DBUILD_DIR="\"$(builddir)\""
  
  indicator_loader_LDADD = \
+--- libindicator-0.4.90.orig/libindicator/indicator-object.c
++++ libindicator-0.4.90/libindicator/indicator-object.c
+@@ -756,7 +756,7 @@ indicator_object_entry_being_removed (In
+ 	g_return_if_fail(INDICATOR_IS_OBJECT(io));
+ 	IndicatorObjectClass * class = INDICATOR_OBJECT_GET_CLASS(io);
+ 
+-	entry_get_private (io, entry)->visibility = ENTRY_INVISIBLE;
++	//entry_get_private (io, entry)->visibility = ENTRY_INVISIBLE;
+ 
+ 	if (class->entry_being_removed != NULL)
+ 		class->entry_being_removed (io, entry);
+@@ -768,7 +768,7 @@ indicator_object_entry_was_added (Indica
+ 	g_return_if_fail(INDICATOR_IS_OBJECT(io));
+ 	IndicatorObjectClass * class = INDICATOR_OBJECT_GET_CLASS(io);
+ 
+-	entry_get_private (io, entry)->visibility = ENTRY_VISIBLE;
++	//entry_get_private (io, entry)->visibility = ENTRY_VISIBLE;
+ 
+ 	if (class->entry_was_added != NULL)
+ 		class->entry_was_added (io, entry);
