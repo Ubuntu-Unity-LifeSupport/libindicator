@@ -5,22 +5,10 @@ Description: <short summary of the patch>
  information below has been extracted from the changelog. Adjust it or drop
  it.
  .
- libindicator (0.4.90-0ubuntu1) precise; urgency=low
+ libindicator (0.4.90-0ubuntu2) precise; urgency=low
  .
-   [ Ted Gould ]
-   * New upstream release.
-     * Support hiding and showing indicators
-     * Track the parent object in the entry
-     * Adding activate function to include Window ID
-   * debian/control: Bumping ABI version of lib
- .
-   [ Ken VanDine ]
    * debian/control
-     - set ubuntu-desktop VCS and maintainer
-   * debian/rules
-     - Updated shlibs
-   * debian/libindicator3-dev.install
-     - include headers
+     - dropped the Conflicts with libindicator6 and libindicator3-6
 Author: Ken VanDine <ken.vandine@canonical.com>
 
 ---
