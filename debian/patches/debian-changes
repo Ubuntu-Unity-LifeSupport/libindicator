@@ -5,12 +5,20 @@ Description: <short summary of the patch>
  information below has been extracted from the changelog. Adjust it or drop
  it.
  .
- libindicator (0.4.90-0ubuntu4) precise; urgency=low
+ libindicator (0.4.91-0ubuntu1) precise; urgency=low
  .
-   * libindicator/indicator-object.c
-     - revert disabling visibility, there is now a better fix for disappearing
-       in indicator-appmenu
-Author: Ken VanDine <ken.vandine@canonical.com>
+   * New upstream release.
+     * Visibility fixes for indicators using that functionality
+     * Ensure that parent_object is more aggressively set
+     * Fix memory leak on groups of items in desktop files (lp: #923629)
+   * Dropping debian/patches
+   * Upstream Merge
+     * Explicitly add in gmodule as a required library
+   * debian/control, debian/rules:
+     * Adding in autoreconf support
+     * Adding a check rule and requiring new build deps
+Author: Ted Gould <ted@ubuntu.com>
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/923629
 
 ---
 The information above should follow the Patch Tagging Guidelines, please
@@ -25,8 +33,23 @@ Forwarded: <no|not-needed|url proving that it has been forwarded>
 Reviewed-By: <name and email of someone who approved the patch>
 Last-Update: <YYYY-MM-DD>
 
---- libindicator-0.4.90.orig/tools/Makefile.am
-+++ libindicator-0.4.90/tools/Makefile.am
+--- libindicator-0.4.91.orig/configure.ac
++++ libindicator-0.4.91/configure.ac
+@@ -52,10 +52,12 @@ AC_ARG_WITH([gtk],
+   [with_gtk=3])
+ AS_IF([test "x$with_gtk" = x3],
+         [PKG_CHECK_MODULES(LIBINDICATOR,  gtk+-3.0 >= $GTK3_REQUIRED_VERSION
++                                          gmodule-2.0
+                                           gio-unix-2.0 >= $GIO_UNIX_REQUIRED_VERSION)
+         ],
+       [test "x$with_gtk" = x2],
+         [PKG_CHECK_MODULES(LIBINDICATOR,  gtk+-2.0 >= $GTK_REQUIRED_VERSION
++                                          gmodule-2.0
+                                           gio-unix-2.0 >= $GIO_UNIX_REQUIRED_VERSION)
+         ],
+       [AC_MSG_FAILURE([Value for --with-gtk was neither 2 nor 3])]
+--- libindicator-0.4.91.orig/tools/Makefile.am
++++ libindicator-0.4.91/tools/Makefile.am
 @@ -19,6 +19,7 @@ indicator_loader_SOURCES = \
  indicator_loader_CFLAGS = \
  	-Wall -Werror \
