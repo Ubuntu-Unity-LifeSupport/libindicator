@@ -1,3 +1,9 @@
+libindicator (12.10.2daily13.04.09-0ubuntu1) raring; urgency=low
+
+  * Automatic snapshot from revision 484
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 09 Apr 2013 02:02:03 +0000
+
 libindicator (12.10.2daily13.04.08-0ubuntu1) raring; urgency=low
 
   [ Marco Trevisan (Treviño) ]
