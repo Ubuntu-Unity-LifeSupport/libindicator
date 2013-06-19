@@ -24,6 +24,7 @@ License along with this library. If not, see
 
 #include <gtk/gtk.h>
 #include <libindicator/indicator-object.h>
+#include <libido/libido.h>
 
 #if GTK_MAJOR_VERSION == 3
 #include <libindicator/indicator-ng.h>
@@ -150,7 +151,7 @@ load_module (const gchar * name, GtkWidget * menu)
 		io = indicator_object_new_from_file(name);
 	}
 #if GTK_MAJOR_VERSION == 3
-	else if (g_str_has_suffix(name, ".indicator")) {
+	else {
 		GError *error = NULL;
 
 		io = INDICATOR_OBJECT (indicator_ng_new_for_profile (name, profile, &error));
@@ -162,9 +163,10 @@ load_module (const gchar * name, GtkWidget * menu)
 
 		title = g_strdup_printf ("%s %s", profile, name);
 	}
-#endif
+#else
 	else
 		return FALSE;
+#endif
 
 	/* Connect to it's signals */
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menu);
@@ -211,6 +213,7 @@ main (int argc, char ** argv)
 	g_unsetenv("UBUNTU_MENUPROXY");
 
 	gtk_init(&argc, &argv);
+	ido_init ();
 
 	entry_to_menuitem = g_hash_table_new (g_direct_hash, g_direct_equal);
 
