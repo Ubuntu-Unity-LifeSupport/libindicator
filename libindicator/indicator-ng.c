@@ -240,9 +240,6 @@ indicator_ng_set_icon_from_variant (IndicatorNg *self,
       return;
     }
 
-  if (!self->entry.image)
-    self->entry.image = g_object_ref_sink (gtk_image_new ());
-
   gtk_widget_show (GTK_WIDGET (self->entry.image));
 
   icon = g_icon_deserialize (variant);
@@ -270,9 +267,6 @@ indicator_ng_set_label (IndicatorNg *self,
         gtk_widget_hide (GTK_WIDGET (self->entry.label));
       return;
     }
-
-  if (!self->entry.label)
-    self->entry.label = g_object_ref_sink (gtk_label_new (NULL));
 
   gtk_label_set_label (GTK_LABEL (self->entry.label), label);
   gtk_widget_show (GTK_WIDGET (self->entry.label));
@@ -498,7 +492,11 @@ indicator_ng_service_vanished (GDBusConnection *connection,
       /* take care not to start it if it repeatedly crashes */
       now = g_get_monotonic_time ();
       if (now - self->last_service_restart < 1 * G_USEC_PER_SEC)
-        return;
+        {
+          g_warning ("The indicator '%s' vanished too quickly after appearing. It won't "
+                     "be respawned anymore, as it could be crashing repeatedly.", self->name);
+          return;
+        }
 
       self->last_service_restart = now;
 
@@ -651,6 +649,9 @@ indicator_ng_initable_iface_init (GInitableIface *initable)
 static void
 indicator_ng_init (IndicatorNg *self)
 {
+  self->entry.label = g_object_ref_sink (gtk_label_new (NULL));
+  self->entry.image = g_object_ref_sink (gtk_image_new ());
+
   self->entry.menu = g_object_ref_sink (gtk_menu_new ());
 
   /* work around IndicatorObject's warning that the accessible
