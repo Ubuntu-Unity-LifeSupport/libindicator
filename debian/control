@@ -67,7 +67,6 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          libgtk-3-dev (>= 2.91.3),
          libindicator3-7 (= ${binary:Version}),
-         libindicator-dev (= ${binary:Version}),
 Description: panel indicator applet - library development files
  This library contains information to build indicators to go into
  the indicator applet.
