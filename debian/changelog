@@ -1,3 +1,11 @@
+libindicator (16.10.0+18.04.20180321.1-0ubuntu1) bionic; urgency=medium
+
+  [ Olivier Tilloy ]
+  * Cast GtkWidget to the expected widget type to fix build failures on bionic
+    [-Werror=incompatible-pointer-types] (LP: #1757261)
+
+ -- Marco Trevisan (Treviño) <mail@3v1n0.net>  Wed, 21 Mar 2018 17:40:06 +0000
+
 libindicator (16.10.0+18.04.20171205.1-0ubuntu1) bionic; urgency=medium
 
   * Drop unnecessary dependency of libindicator3-dev on libindicator-dev

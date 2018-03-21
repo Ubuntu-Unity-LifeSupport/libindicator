@@ -687,10 +687,10 @@ indicator_ng_initable_iface_init (GInitableIface *initable)
 static void
 indicator_ng_init (IndicatorNg *self)
 {
-  self->entry.label = g_object_ref_sink (gtk_label_new (NULL));
-  self->entry.image = g_object_ref_sink (gtk_image_new ());
+  self->entry.label = g_object_ref_sink (GTK_LABEL (gtk_label_new (NULL)));
+  self->entry.image = g_object_ref_sink (GTK_IMAGE (gtk_image_new ()));
 
-  self->entry.menu = g_object_ref_sink (gtk_menu_new ());
+  self->entry.menu = g_object_ref_sink (GTK_MENU (gtk_menu_new ()));
 
   g_signal_connect (self->entry.menu, "show", G_CALLBACK (indicator_ng_menu_shown), self);
   g_signal_connect (self->entry.menu, "hide", G_CALLBACK (indicator_ng_menu_hidden), self);
