@@ -13,7 +13,7 @@ indicator_loader_SOURCES = \
 	indicator-loader.c
 
 indicator_loader_CFLAGS = \
-	-Wall -Werror \
+	-Wall \
 	$(LIBINDICATOR_CFLAGS) -I$(top_srcdir) \
 	-DBUILD_DIR="\"$(builddir)\""
 
