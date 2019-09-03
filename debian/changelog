@@ -1,3 +1,9 @@
+libindicator (16.10.0+18.04.20180321.1-0ubuntu4) eoan; urgency=medium
+
+  * Remove hard-coded dependency on multiarch-support.
+
+ -- Matthias Klose <doko@ubuntu.com>  Tue, 03 Sep 2019 19:43:27 +0200
+
 libindicator (16.10.0+18.04.20180321.1-0ubuntu3) eoan; urgency=medium
 
   * Don't build with -Werror.
