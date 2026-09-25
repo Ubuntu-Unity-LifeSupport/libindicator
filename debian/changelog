@@ -1,3 +1,14 @@
+libindicator (16.10.0+18.04.20180321.1-0ubuntu8+unity1) resolute; urgency=medium
+
+  * Build-depend on systemd-dev. configure.ac asks systemd.pc for the user
+    unit directory; systemd.pc moved to systemd-dev, which nothing pulls in
+    any more, so in 26.04 indicators-pre.target is not installed and
+    dh_install --fail-missing stops the build. The archive's binaries
+    predate the move (last built for noble). unity-panel-service has
+    BindsTo=indicators-pre.target, so the target must keep shipping.
+
+ -- Ubuntu Unity Life Support <mihail.rozshko@gmail.com>  Fri, 25 Sep 2026 16:55:33 +0000
+
 libindicator (16.10.0+18.04.20180321.1-0ubuntu8) noble; urgency=medium
 
   * No-change rebuild for CVE-2024-3094
