@@ -350,6 +350,165 @@ indicator_ng_update_entry (IndicatorNg *self)
     g_variant_unref (state);
 }
 
+/* A menu model that shows an Ayatana indicator's menu with the item types
+ * Unity knows: an x-ayatana-type item also gets the matching
+ * x-canonical-type, so the IDO items registered for Unity's
+ * own indicators render it (the messages source rows, for example), where
+ * Unity has such an item. Sections and submenus are wrapped the same way. */
+typedef struct
+{
+  GMenuModel parent;
+  GMenuModel *base;
+  gulong items_changed_id;
+} IndicatorNgAyatanaMenu;
+
+typedef GMenuModelClass IndicatorNgAyatanaMenuClass;
+
+G_DEFINE_TYPE (IndicatorNgAyatanaMenu, indicator_ng_ayatana_menu, G_TYPE_MENU_MODEL)
+
+static GMenuModel * indicator_ng_ayatana_menu_new (GMenuModel *base);
+
+/* The Ayatana item types that have a Unity IDO item. A type without one
+ * keeps no x-canonical-type and shows as a plain item: an unknown
+ * x-canonical-type would make GTK drop the item altogether. */
+static const gchar *
+indicator_ng_ayatana_to_canonical_type (const gchar *type)
+{
+  static const gchar * const types[][2] = {
+    { "org.ayatana.indicator.application",     "com.canonical.application" },
+    { "org.ayatana.indicator.alarm",           "com.canonical.indicator.alarm" },
+    { "org.ayatana.indicator.appointment",     "com.canonical.indicator.appointment" },
+    { "org.ayatana.indicator.basic",           "com.canonical.indicator.basic" },
+    { "org.ayatana.indicator.calendar",        "com.canonical.indicator.calendar" },
+    { "org.ayatana.indicator.location",        "com.canonical.indicator.location" },
+    { "org.ayatana.indicator.messages.source", "com.canonical.indicator.messages.source" },
+    { "org.ayatana.indicator.progress",        "com.canonical.indicator.progress" },
+    { "org.ayatana.indicator.switch",          "com.canonical.indicator.switch" },
+    { "org.ayatana.indicator.media-player",    "com.canonical.unity.media-player" },
+    { "org.ayatana.indicator.playback-item",   "com.canonical.unity.playback-item" },
+    { "org.ayatana.indicator.slider",          "com.canonical.unity.slider" },
+  };
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (types); i++)
+    if (g_str_equal (type, types[i][0]))
+      return types[i][1];
+
+  return NULL;
+}
+
+static gboolean
+indicator_ng_ayatana_menu_is_mutable (GMenuModel *model)
+{
+  return g_menu_model_is_mutable (((IndicatorNgAyatanaMenu *) model)->base);
+}
+
+static gint
+indicator_ng_ayatana_menu_get_n_items (GMenuModel *model)
+{
+  return g_menu_model_get_n_items (((IndicatorNgAyatanaMenu *) model)->base);
+}
+
+static void
+indicator_ng_ayatana_menu_get_item_attributes (GMenuModel  *model,
+                                               gint         index,
+                                               GHashTable **table)
+{
+  GMenuModel *base = ((IndicatorNgAyatanaMenu *) model)->base;
+  GMenuAttributeIter *iter;
+  const gchar *name;
+  GVariant *value;
+
+  *table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) g_variant_unref);
+
+  iter = g_menu_model_iterate_item_attributes (base, index);
+  while (g_menu_attribute_iter_get_next (iter, &name, &value))
+    {
+      if (g_str_equal (name, "x-ayatana-type") &&
+          g_variant_is_of_type (value, G_VARIANT_TYPE_STRING) &&
+          !g_hash_table_contains (*table, "x-canonical-type"))
+        {
+          const gchar *type = indicator_ng_ayatana_to_canonical_type (g_variant_get_string (value, NULL));
+
+          if (type)
+            g_hash_table_insert (*table, g_strdup ("x-canonical-type"),
+                                 g_variant_ref_sink (g_variant_new_string (type)));
+        }
+
+      g_hash_table_insert (*table, g_strdup (name), value);
+    }
+  g_object_unref (iter);
+}
+
+static void
+indicator_ng_ayatana_menu_get_item_links (GMenuModel  *model,
+                                          gint         index,
+                                          GHashTable **table)
+{
+  GMenuModel *base = ((IndicatorNgAyatanaMenu *) model)->base;
+  GMenuLinkIter *iter;
+  const gchar *name;
+  GMenuModel *link;
+
+  *table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+
+  iter = g_menu_model_iterate_item_links (base, index);
+  while (g_menu_link_iter_get_next (iter, &name, &link))
+    {
+      g_hash_table_insert (*table, g_strdup (name), indicator_ng_ayatana_menu_new (link));
+      g_object_unref (link);
+    }
+  g_object_unref (iter);
+}
+
+static void
+indicator_ng_ayatana_menu_base_changed (GMenuModel *base,
+                                        gint        position,
+                                        gint        removed,
+                                        gint        added,
+                                        gpointer    user_data)
+{
+  g_menu_model_items_changed (G_MENU_MODEL (user_data), position, removed, added);
+}
+
+static void
+indicator_ng_ayatana_menu_finalize (GObject *object)
+{
+  IndicatorNgAyatanaMenu *self = (IndicatorNgAyatanaMenu *) object;
+
+  g_signal_handler_disconnect (self->base, self->items_changed_id);
+  g_object_unref (self->base);
+
+  G_OBJECT_CLASS (indicator_ng_ayatana_menu_parent_class)->finalize (object);
+}
+
+static void
+indicator_ng_ayatana_menu_class_init (IndicatorNgAyatanaMenuClass *class)
+{
+  G_OBJECT_CLASS (class)->finalize = indicator_ng_ayatana_menu_finalize;
+  class->is_mutable = indicator_ng_ayatana_menu_is_mutable;
+  class->get_n_items = indicator_ng_ayatana_menu_get_n_items;
+  class->get_item_attributes = indicator_ng_ayatana_menu_get_item_attributes;
+  class->get_item_links = indicator_ng_ayatana_menu_get_item_links;
+}
+
+static void
+indicator_ng_ayatana_menu_init (IndicatorNgAyatanaMenu *self)
+{
+}
+
+static GMenuModel *
+indicator_ng_ayatana_menu_new (GMenuModel *base)
+{
+  IndicatorNgAyatanaMenu *self = g_object_new (indicator_ng_ayatana_menu_get_type (), NULL);
+
+  self->base = g_object_ref (base);
+  self->items_changed_id = g_signal_connect (base, "items-changed",
+                                             G_CALLBACK (indicator_ng_ayatana_menu_base_changed), self);
+
+  return G_MENU_MODEL (self);
+}
+
 static gboolean
 indicator_ng_menu_item_is_of_type (GMenuModel  *menu,
                                    gint         index,
@@ -363,8 +522,35 @@ indicator_ng_menu_item_is_of_type (GMenuModel  *menu,
       has_type = g_str_equal (type, expected_type);
       g_free (type);
     }
+  /* Ayatana indicators (the only messaging menu in 26.04) name their types
+   * org.ayatana.* in x-ayatana-type; accept them for com.canonical.* */
+  else if (g_str_has_prefix (expected_type, "com.canonical.") &&
+           g_menu_model_get_item_attribute (menu, index, "x-ayatana-type", "s", &type))
+    {
+      gchar *ayatana_type = g_strconcat ("org.ayatana.", expected_type + strlen ("com.canonical."), NULL);
+      has_type = g_str_equal (type, ayatana_type);
+      g_free (ayatana_type);
+      g_free (type);
+    }
 
   return has_type;
+}
+
+static gboolean
+indicator_ng_menu_item_get_action (GMenuModel   *menu,
+                                   gint          index,
+                                   const gchar  *name,
+                                   gchar       **action)
+{
+  /* x-canonical-NAME, or Ayatana's x-ayatana-NAME */
+  gchar *canonical = g_strconcat ("x-canonical-", name, NULL);
+  gchar *ayatana = g_strconcat ("x-ayatana-", name, NULL);
+  gboolean found = g_menu_model_get_item_attribute (menu, index, canonical, "s", action) ||
+                   g_menu_model_get_item_attribute (menu, index, ayatana, "s", action);
+
+  g_free (canonical);
+  g_free (ayatana);
+  return found;
 }
 
 static void
@@ -404,14 +590,14 @@ indicator_ng_menu_changed (GMenuModel *menu,
               g_free (action);
             }
 
-          if (g_menu_model_get_item_attribute (self->menu, 0, "x-canonical-scroll-action", "s", &action))
+          if (indicator_ng_menu_item_get_action (self->menu, 0, "scroll-action", &action))
             {
               if (g_str_has_prefix (action, "indicator."))
                 self->scroll_action = g_strdup (action + strlen ("indicator."));
               g_free (action);
             }
 
-          if (g_menu_model_get_item_attribute (self->menu, 0, "x-canonical-secondary-action", "s", &action))
+          if (indicator_ng_menu_item_get_action (self->menu, 0, "secondary-action", &action))
             {
               if (g_str_has_prefix (action, "indicator."))
                 self->secondary_action = g_strdup (action + strlen ("indicator."));
@@ -428,6 +614,18 @@ indicator_ng_menu_changed (GMenuModel *menu,
           popup = g_menu_model_get_item_link (self->menu, 0, G_MENU_LINK_SUBMENU);
           if (popup)
             {
+              gchar *type;
+
+              /* an Ayatana indicator: show its items with Unity's item types */
+              if (g_menu_model_get_item_attribute (self->menu, 0, "x-ayatana-type", "s", &type))
+                {
+                  GMenuModel *wrapped = indicator_ng_ayatana_menu_new (popup);
+
+                  g_object_unref (popup);
+                  popup = wrapped;
+                  g_free (type);
+                }
+
               gtk_menu_shell_bind_model (GTK_MENU_SHELL (self->entry.menu), popup, NULL, TRUE);
               g_object_unref (popup);
             }

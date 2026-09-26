@@ -1,3 +1,17 @@
+libindicator (16.10.0+18.04.20180321.1-0ubuntu8+unity2) resolute; urgency=medium
+
+  * libindicator/indicator-ng.c: accept Ayatana indicators, whose root menu
+    item is x-ayatana-type org.ayatana.indicator.root and whose scroll and
+    secondary actions are x-ayatana-*. The only messaging menu library in
+    26.04 is Ayatana's, so this lets Unity's panel show
+    ayatana-indicator-messages for Geary, Pidgin and other clients.
+    Its menu is shown through a wrapper that adds the matching
+    x-canonical-type to each Ayatana item type Unity's IDO knows, so those
+    items render as in Unity's own indicators (message sources with counts,
+    clickable) instead of plain, greyed rows; other types stay plain.
+
+ -- Ubuntu Unity Life Support <mihail.rozshko@gmail.com>  Sat, 26 Sep 2026 17:07:13 +0000
+
 libindicator (16.10.0+18.04.20180321.1-0ubuntu8+unity1) resolute; urgency=medium
 
   * Build-depend on systemd-dev. configure.ac asks systemd.pc for the user
