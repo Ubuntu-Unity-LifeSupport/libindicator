@@ -1,3 +1,13 @@
+libindicator (16.10.0+18.04.20180321.1-0ubuntu8+unity3) resolute; urgency=medium
+
+  * libindicator/indicator-ng.c: declare the Ayatana menu wrapper's get_type
+    static. +unity2's G_DEFINE_TYPE exported it
+    (indicator_ng_ayatana_menu_get_type) although it is private to this
+    file; the library again exports exactly the archive's 40 symbols
+    (UNITY-20260927-023).
+
+ -- Ubuntu Unity Life Support <mihail.rozshko@gmail.com>  Mon, 28 Sep 2026 08:40:23 +0000
+
 libindicator (16.10.0+18.04.20180321.1-0ubuntu8+unity2) resolute; urgency=medium
 
   * libindicator/indicator-ng.c: accept Ayatana indicators, whose root menu

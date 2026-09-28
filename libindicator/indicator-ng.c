@@ -364,6 +364,10 @@ typedef struct
 
 typedef GMenuModelClass IndicatorNgAyatanaMenuClass;
 
+/* A private type of this file: the static declaration keeps G_DEFINE_TYPE's
+ * get_type out of the library's exported symbols. */
+static GType indicator_ng_ayatana_menu_get_type (void);
+
 G_DEFINE_TYPE (IndicatorNgAyatanaMenu, indicator_ng_ayatana_menu, G_TYPE_MENU_MODEL)
 
 static GMenuModel * indicator_ng_ayatana_menu_new (GMenuModel *base);
